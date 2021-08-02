@@ -27,7 +27,7 @@ static const uart_config_t s_uart_config = {
 
 void com1_test_start(void)
 {
-    uart_port_t uart_num = 0; // requires CONFIG_ESP_CONSOLE_NONE=y
+    uart_port_t uart_num = 1; 
     quali_uart_test_handle_t *hdl;
     test_status_report_handle_t *sr_handle;
 
