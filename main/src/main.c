@@ -10,27 +10,40 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+#include "esp_err.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_log.h"
-#include "ota_server.h"
 #include "com_test.h"
+#include "io4edge_core.h"
 
-bool diagnostic_cb(void)
+static char *TAG = "main";
+
+// example hostname
+static const char* hostname = "ESP32S2";
+// example default instance name
+static const char* instance = "cpu01uc-usb_io_ctrl";
+
+static bool application_is_working(void)
 {
-    /* signal that everything is okay */
+    ESP_LOGI(TAG, "application_is_working called");
     return true;
 }
 
 void app_main(void)
 {
-    /* initialize ota update */
-    init_ota();
+    static io4edge_core_config_t io4edge_core_config = {
+        .core_server_priority = 5, .application_is_working = application_is_working};
+
+    ESP_ERROR_CHECK(io4edge_new_esp_nvs_hw_inventory(&io4edge_core_config.hw_inventory_provider));
+    ESP_ERROR_CHECK(io4edge_core_init(hostname, instance));
 
     com1_test_start();
 
+    ESP_ERROR_CHECK(io4edge_core_start(&io4edge_core_config));
+
     for(;;){
-        ESP_LOGI("main", "Alive");
+        ESP_LOGI(TAG, "Alive");
         vTaskDelay(pdMS_TO_TICKS(1000));
     }
 }
