@@ -35,6 +35,10 @@ void app_main(void)
     static io4edge_core_config_t io4edge_core_config = {
         .core_server_priority = 5, .application_is_working = application_is_working};
 
+    /* enable ENDC_DC */
+    gpio_set_direction(GPIO_NUM_34, GPIO_MODE_OUTPUT);
+    gpio_set_level(GPIO_NUM_34, 1);
+
     ESP_ERROR_CHECK(io4edge_new_esp_nvs_hw_inventory(&io4edge_core_config.hw_inventory_provider));
     ESP_ERROR_CHECK(io4edge_core_init(hostname, instance));
 
