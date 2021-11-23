@@ -15,6 +15,7 @@ limitations under the License.
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "io4edge.h"
 #include "io4edge_core.h"
 
 static char* TAG = "main";
@@ -36,7 +37,10 @@ void app_main(void)
         .core_server_priority = 5, .application_is_working = application_is_working};
 
     ESP_ERROR_CHECK(io4edge_new_esp_nvs_hw_inventory(&io4edge_core_config.hw_inventory_provider));
-    ESP_ERROR_CHECK(io4edge_core_init(hostname, instance));
+
+    io4edge_config_t io4edge_config = {.hostname = hostname, .instance_name = instance};
+
+    ESP_ERROR_CHECK(io4edge_init(&io4edge_config));
 
     com1_test_start();
 

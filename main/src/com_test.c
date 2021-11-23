@@ -30,7 +30,9 @@ void com1_test_start(void)
     quali_uart_test_handle_t *hdl;
     test_status_report_handle_t *sr_handle;
 
-    ESP_ERROR_CHECK(new_test_status_report_instance(&sr_handle, 10000));
+    test_status_report_config_t config = {.instance = "cpu01uc-usb-io-ctrl-com", .instance_idx = 0, .port = 10000};
+
+    ESP_ERROR_CHECK(new_test_status_report_instance(&sr_handle, &config));
 
     quali_uart_test_config_t test_config = {.uart_num = UART_NUM_1,
         .uart_config = &s_uart_config,
